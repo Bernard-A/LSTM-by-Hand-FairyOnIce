@@ -204,7 +204,6 @@ static void send_message()
     // Dual prediction
     // We position ourselves as the server and base prediction on previously transmitted value
 
-
     lstm_output = lstmCellSimple(x_val, lstm_cell_input_weights, lstm_cell_hidden_weights,
                                  lstm_cell_bias, lstm_cell_hidden_layer, lstm_cell_cell_states);
 
@@ -401,7 +400,7 @@ float * lstmCellSimple(float input, const float * input_weights, const float * h
     for (int i = 0; i < HUNIT; ++i) {
 
         new_cell_states[i] = forget_gate[i] * cell_states [i] + input_gate[i] * cell_candidate[i];
-        new_hidden_layer[i] = output_gate[i] * (float) (tanh((double) new_cell_states[i]));
+        new_hidden_layer[i] = output_gate[i] * tanh(new_cell_states[i]);
 
     }
 
