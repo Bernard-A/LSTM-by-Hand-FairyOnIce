@@ -9,7 +9,7 @@
 
 #endif //CPP_PARAMETERS_H
 
-const int hidden_unit = HUNIT;
+const int hunit = HUNIT;
 
 const float lstm_cell_input_weights[4 * HUNIT] = {0.3234084, 0.70131856, 0.37922043,
                                                   0.66995215, -0.54794693, 0.1504041,
@@ -32,8 +32,8 @@ const float lstm_cell_bias[4 * HUNIT] = {0.10343148, 0.11245319, 0.21322289,
                                          0.18435329, 0.18004698, -0.2149152,
                                          0.09632485, 0.0977062, 0.20585288};
 
-float lstm_cell_hidden_layer[HUNIT] = {-0.10504138, 0.05571184, -0.13689657};
-float lstm_cell_cell_states[HUNIT] = {-0.19864744, 0.1107232, -0.27651063};
+float lstm_cell_hidden_layer[HUNIT] = {-0.12745334, 0.06317158, -0.15865295};
+float lstm_cell_cell_states[HUNIT] = {-0.2454686, 0.12659174, -0.32833787};
 
 const float dense_weights[HUNIT] = {-0.87860644, 0.39441893, -1.188957};
 const float dense_bias = 0.2822338;

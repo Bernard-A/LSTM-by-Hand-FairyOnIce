@@ -8,9 +8,9 @@
 #include "parameters.h"
 
 float * lstmCellSimple(float input, const float * input_weights, const float * hidden_weights,
-                       const float * bias, float * hidden_layer, const float * cell_states, int hunit);
+                       const float * bias, float * hidden_layer, const float * cell_states);
 
-float dense_nn(const float * input, const float * Weight, float bias, int hunit);
+float dense_nn(const float * input, const float * Weight, float bias);
 
 float sigmoid_function (float input);
 
@@ -21,9 +21,9 @@ int main() {
     float output_value;
 
     lstm_output = lstmCellSimple(input_value, lstm_cell_input_weights, lstm_cell_hidden_weights,
-                                 lstm_cell_bias, lstm_cell_hidden_layer, lstm_cell_cell_states, hidden_unit);
+                                 lstm_cell_bias, lstm_cell_hidden_layer, lstm_cell_cell_states);
 
-    output_value = dense_nn(lstm_output, dense_weights, dense_bias, hidden_unit);
+    output_value = dense_nn(lstm_output, dense_weights, dense_bias);
 
     printf("Output Value %f\n", output_value);
 
@@ -31,41 +31,42 @@ int main() {
 }
 
 float * lstmCellSimple(float input, const float * input_weights, const float * hidden_weights,
-                       const float * bias, float * hidden_layer, const float * cell_states, int hunit) {
+                       const float * bias, float * hidden_layer, const float * cell_states) {
     /**
      * input - float
-     * input_weight - float array (4*hunit) - Weights W_i, W_f, W_c, W_o
-     * hidden_weights - float array (4*hunit*hunit) - Weights U_i, U_f, U_c, U_o
-     * bias - float array (4*hunit) - Bias B_i, B_f, B_c, B_o
-     * hidden_layer - float array (4*hunit) - Outputs h
-     * cell_states - float array (4*hunit) - Cell states
-     * hunit - size of hidden layer
+     * input_weight - float array (4*HUNIT) - Weights W_i, W_f, W_c, W_o
+     * hidden_weights - float array (4*HUNIT*HUNIT) - Weights U_i, U_f, U_c, U_o
+     * bias - float array (4*HUNIT) - Bias B_i, B_f, B_c, B_o
+     * hidden_layer - float array (4*HUNIT) - Outputs h
+     * cell_states - float array (4*HUNIT) - Cell states
+     * HUNIT - size of hidden layer
      */
-    float new_hidden_layer[hunit];
-    float new_cell_states[hunit];
 
-    float input_gate[hunit];
-    float forget_gate[hunit];
-    float cell_candidate[hunit];
-    float output_gate[hunit];
+    float new_hidden_layer[HUNIT];
+    float new_cell_states[HUNIT];
 
-    for (int i = 0; i < hunit; ++i) {
-        input_gate[i] = input_weights[0 * hunit + i] * input;
-        forget_gate[i] = input_weights[1 * hunit + i] * input;
-        cell_candidate[i] = input_weights[2 * hunit + i] * input;
-        output_gate[i] = input_weights[3 * hunit + i] * input;
+    float input_gate[HUNIT];
+    float forget_gate[HUNIT];
+    float cell_candidate[HUNIT];
+    float output_gate[HUNIT];
 
-        for (int j = 0; j < hunit; ++j) {
-            input_gate[i] += hidden_weights[(0 * hunit + i) * hunit + j] * hidden_layer[j];
-            forget_gate[i] += hidden_weights[(1 * hunit + i) * hunit + j] * hidden_layer[j];
-            cell_candidate[i] += hidden_weights[(2 * hunit + i) * hunit + j] * hidden_layer[j];
-            output_gate[i] += hidden_weights[(3 * hunit + i) * hunit + j] * hidden_layer[j];
+    for (int i = 0; i < HUNIT; ++i) {
+        input_gate[i] = input_weights[0 * HUNIT + i] * input;
+        forget_gate[i] = input_weights[1 * HUNIT + i] * input;
+        cell_candidate[i] = input_weights[2 * HUNIT + i] * input;
+        output_gate[i] = input_weights[3 * HUNIT + i] * input;
+
+        for (int j = 0; j < HUNIT; ++j) {
+            input_gate[i] += hidden_weights[(0 * HUNIT + i) * HUNIT + j] * hidden_layer[j];
+            forget_gate[i] += hidden_weights[(1 * HUNIT + i) * HUNIT + j] * hidden_layer[j];
+            cell_candidate[i] += hidden_weights[(2 * HUNIT + i) * HUNIT + j] * hidden_layer[j];
+            output_gate[i] += hidden_weights[(3 * HUNIT + i) * HUNIT + j] * hidden_layer[j];
         }
 
-        input_gate[i] += bias[0 * hunit + i];
-        forget_gate[i] += bias[1 * hunit + i];
-        cell_candidate[i] += bias[2 * hunit + i];
-        output_gate[i] += bias[3 * hunit + i];
+        input_gate[i] += bias[0 * HUNIT + i];
+        forget_gate[i] += bias[1 * HUNIT + i];
+        cell_candidate[i] += bias[2 * HUNIT + i];
+        output_gate[i] += bias[3 * HUNIT + i];
 
         input_gate[i] = sigmoid_function(input_gate[i]);
         forget_gate[i] = sigmoid_function(forget_gate[i]);
@@ -73,7 +74,7 @@ float * lstmCellSimple(float input, const float * input_weights, const float * h
         output_gate[i] = sigmoid_function(output_gate[i]);
     }
 
-    for (int i = 0; i < hunit; ++i) {
+    for (int i = 0; i < HUNIT; ++i) {
 
         new_cell_states[i] = forget_gate[i] * cell_states [i] + input_gate[i] * cell_candidate[i];
         new_hidden_layer[i] = output_gate[i] * (float) (tanh((double) new_cell_states[i]));
@@ -86,9 +87,9 @@ float * lstmCellSimple(float input, const float * input_weights, const float * h
     return hidden_layer;
 }
 
-float dense_nn(const float * input, const float * Weight, float bias, int hunit) {
+float dense_nn(const float * input, const float * Weight, float bias) {
     float output = 0;
-    for (int i = 0; i < hunit; ++i) {
+    for (int i = 0; i < HUNIT; ++i) {
         output += input[i] * Weight[i];
     }
     output += bias;
