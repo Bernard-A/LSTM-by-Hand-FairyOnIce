@@ -175,7 +175,10 @@ static void send_message()
     static float previously_transmitted;
     static int index_value;
     static int skipped;
-    static float weight_array[14];
+    
+    float *lstm_output;
+    lstm_output = malloc(HUNIT * sizeof(float))
+    float output_value;
 
     // Loading data for tests if first time booting
     if (first_send_message) {
@@ -201,8 +204,6 @@ static void send_message()
     // Dual prediction
     // We position ourselves as the server and base prediction on previously transmitted value
 
-    float lstm_output[HUNIT];
-    float output_value;
 
     lstm_output = lstmCellSimple(x_val, lstm_cell_input_weights, lstm_cell_hidden_weights,
                                  lstm_cell_bias, lstm_cell_hidden_layer, lstm_cell_cell_states);
