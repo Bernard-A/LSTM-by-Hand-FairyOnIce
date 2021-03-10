@@ -5,166 +5,98 @@
 #include <iostream>
 #include <cmath>
 #define PI 3.141592654
+#include "parameters.h"
 
-struct LSTMCell {
-    float y_t_1; // Previous output
-    float c_t_1; // Previous Cell State
-    float W_i_x; // Weight i against x
-    float W_f_x; // Weight f against x
-    float W_z_x; // Weight z against x
-    float W_o_x; // Weight o against x
-    float W_i_y; // Weight i against y
-    float W_f_y; // Weight f against y
-    float W_z_y; // Weight z against y
-    float W_o_y; // Weight o against y
-    float b_i; // Bias i
-    float b_f; // Bias f
-    float b_z; // Bias z
-    float b_o; // Bias o
-};
+float * lstmCellSimple(float input, const float * input_weights, const float * hidden_weights,
+                       const float * bias, float * hidden_layer, const float * cell_states);
 
-float dense_nn(float input, float W, float b);
-float complete_nn(float input, float * weights_array);
-float lstm_chain(float input_0, int layer_number, float * cells_data_array);
-void lstm_cell (float x_t, struct LSTMCell lstmCell, float* output);
+float dense_nn(const float * input, const float * Weight, float bias);
+
 float sigmoid_function (float input);
-float dot(float a, float b);
-float g(float input);
-float h(float input);
 
 int main() {
 
-    float weight_array[] = {-0.218822, -0.011803,
-                            1.1231076, 0.4633199, -1.190576 , -0.0426245,
-                            0.45407116, 0.00370111, 0.3802879 , 0.8057212,
-                            0.18706907,  1.        , -0.22962211,  0.14464839};
+    float * lstm_output;
+    float input_value = 0.410709;
+    float output_value;
 
-// Yt-1 = 0.449882 => -0.2188218818202041 , Yt = 0.4286432 => -0.2020145486608096, xt = 0.428020
+    lstm_output = lstmCellSimple(input_value, lstm_cell_input_weights, lstm_cell_hidden_weights,
+                                 lstm_cell_bias, lstm_cell_hidden_layer, lstm_cell_cell_states);
 
-// [array([[ 1.1231076,  0.4633199, -1.190576 , -0.0426245]], dtype=float32)
-//  array([[0.45407116, 0.00370111, 0.3802879 , 0.8057212 ]], dtype=float32),
-//  array([ 0.18706907,  1.        , -0.22962211,  0.14464839], dtype=float32)]
+    output_value = dense_nn(lstm_output, dense_weights, dense_bias);
 
-// Program initialized with y_t_1 = -0.2188218818202041 and c_t_1 = -0.011803 for an x_t of 0.428020
-
-    float value = complete_nn(0.428020, weight_array);
-
-    printf("Final Value %f\n", value);
+    printf("Output Value %f\n", output_value);
 
     return 0;
 }
 
-float complete_nn(float input, float * weights_array) {//  Will need complete declaration }, float **network) {
-
-    float intermediary = input;
-    float final = input;
-    int number_of_lstm_layers = 1; // Hardcoded, will need actual values
-
-    intermediary = lstm_chain(input, number_of_lstm_layers, weights_array);
-
-    /** Need to change this to fit parameters **/
-    float dense_weight = -1.2636627;
-    float dense_bias = 0.17336495;
-
-    final = dense_nn(intermediary, dense_weight, dense_bias);
-
-    return final;
-
-}
-
-float dense_nn(float input, float W, float b) {
-    return input * W + b;
-}
-
-float lstm_chain(float input_0, int layer_number, float * cells_data_array) {
-
-    float input = input_0;
-
-    struct LSTMCell lstmCellinChain{};
-
-    float output[2] = {0.,0.};
-
-    for (int i = 0; i < layer_number; ++i) {
-        lstmCellinChain.y_t_1 = cells_data_array[i * 14 + 0];
-        lstmCellinChain.c_t_1 = cells_data_array[i * 14 + 1];
-
-        lstmCellinChain.W_i_x = cells_data_array[i * 14 + 2];
-        lstmCellinChain.W_f_x = cells_data_array[i * 14 + 3];
-        lstmCellinChain.W_z_x = cells_data_array[i * 14 + 4];
-        lstmCellinChain.W_o_x = cells_data_array[i * 14 + 5];
-
-        lstmCellinChain.W_i_y = cells_data_array[i * 14 + 6];
-        lstmCellinChain.W_f_y = cells_data_array[i * 14 + 7];
-        lstmCellinChain.W_z_y = cells_data_array[i * 14 + 8];
-        lstmCellinChain.W_o_y = cells_data_array[i * 14 + 9];
-
-        lstmCellinChain.b_i = cells_data_array[i * 14 + 10];
-        lstmCellinChain.b_f = cells_data_array[i * 14 + 11];
-        lstmCellinChain.b_z = cells_data_array[i * 14 + 12];
-        lstmCellinChain.b_o = cells_data_array[i * 14 + 13];
-
-        lstm_cell(input, lstmCellinChain, output);
-
-        cells_data_array[i * 14+0] = output[0];
-        cells_data_array[i * 14+1] = output[1];
-
-        input = output[0];
-        // No changes to input;
-    }
-    return output[0];
-}
-
-void lstm_cell (float x_t, struct LSTMCell lstmCell, float* output) {
-
-    float c_t = 0.;
-    float y_t = 0.;
-
-    float z_t = 0.;
-    float i_t = 0.;
-    float f_t = 0.;
-    float o_t = 0.;
-
+float * lstmCellSimple(float input, const float * input_weights, const float * hidden_weights,
+                       const float * bias, float * hidden_layer, const float * cell_states) {
     /**
-     * TODO :
-     * // - Implement g and h function
-     * // - Pass Weight & bias as parameters Done
+     * input - float
+     * input_weight - float array (4*HUNIT) - Weights W_i, W_f, W_c, W_o
+     * hidden_weights - float array (4*HUNIT*HUNIT) - Weights U_i, U_f, U_c, U_o
+     * bias - float array (4*HUNIT) - Bias B_i, B_f, B_c, B_o
+     * hidden_layer - float array (4*HUNIT) - Outputs h
+     * cell_states - float array (4*HUNIT) - Cell states
+     * HUNIT - size of hidden layer
      */
 
-    // Forget Gate
-    f_t = sigmoid_function(lstmCell.W_f_x * x_t + lstmCell.W_f_y * lstmCell.y_t_1 + lstmCell.b_f);
+    float new_hidden_layer[HUNIT];
+    float new_cell_states[HUNIT];
 
-    // Input Gate
-    i_t = sigmoid_function(lstmCell.W_i_x * x_t + lstmCell.W_i_y * lstmCell.y_t_1 + lstmCell.b_i);
+    float input_gate[HUNIT];
+    float forget_gate[HUNIT];
+    float cell_candidate[HUNIT];
+    float output_gate[HUNIT];
 
-    // Current cell state
-    z_t = g(lstmCell.W_z_x * x_t + lstmCell.W_z_y * lstmCell.y_t_1 + lstmCell.b_z);
+    for (int i = 0; i < HUNIT; ++i) {
+        input_gate[i] = input_weights[0 * HUNIT + i] * input;
+        forget_gate[i] = input_weights[1 * HUNIT + i] * input;
+        cell_candidate[i] = input_weights[2 * HUNIT + i] * input;
+        output_gate[i] = input_weights[3 * HUNIT + i] * input;
 
-    // Final Cell state
-    c_t = dot(z_t, i_t) + dot(lstmCell.c_t_1, f_t);
+        for (int j = 0; j < HUNIT; ++j) {
+            input_gate[i] += hidden_weights[(0 * HUNIT + i) * HUNIT + j] * hidden_layer[j];
+            forget_gate[i] += hidden_weights[(1 * HUNIT + i) * HUNIT + j] * hidden_layer[j];
+            cell_candidate[i] += hidden_weights[(2 * HUNIT + i) * HUNIT + j] * hidden_layer[j];
+            output_gate[i] += hidden_weights[(3 * HUNIT + i) * HUNIT + j] * hidden_layer[j];
+        }
 
-    // Output Cell state
-    o_t = sigmoid_function(lstmCell.W_o_x * x_t + lstmCell.W_o_y * lstmCell.y_t_1 + lstmCell.b_o);
+        input_gate[i] += bias[0 * HUNIT + i];
+        forget_gate[i] += bias[1 * HUNIT + i];
+        cell_candidate[i] += bias[2 * HUNIT + i];
+        output_gate[i] += bias[3 * HUNIT + i];
 
-    // Result
-    y_t = dot(h(c_t), o_t);
+        input_gate[i] = sigmoid_function(input_gate[i]);
+        forget_gate[i] = sigmoid_function(forget_gate[i]);
+        cell_candidate[i] = sigmoid_function(cell_candidate[i]);
+        output_gate[i] = sigmoid_function(output_gate[i]);
+    }
 
-    output[0] = y_t;
-    output[1] = c_t;
+    for (int i = 0; i < HUNIT; ++i) {
+
+        new_cell_states[i] = forget_gate[i] * cell_states [i] + input_gate[i] * cell_candidate[i];
+        new_hidden_layer[i] = output_gate[i] * (float) (tanh((double) new_cell_states[i]));
+
+    }
+
+    hidden_layer = new_hidden_layer;
+    cell_states = new_cell_states;
+
+    return hidden_layer;
+}
+
+float dense_nn(const float * input, const float * Weight, float bias) {
+    float output = 0;
+    for (int i = 0; i < HUNIT; ++i) {
+        output += input[i] * Weight[i];
+    }
+    output += bias;
+    return output;
 }
 
 
 float sigmoid_function (float input) {
     return 1/(1+((float) exp(- (double) input))); // 1/(1+exp(-(input)));
-}
-
-float dot( float a, float b) {
-    return a*b;
-}
-
-float g(float input) { // Supposed to be tanh(input) from readings
-    return (float) tanh((double) input);
-}
-
-float h(float input) {
-    return (float) tanh((double) input); // Supposed to be tanh(input) from readings
 }
