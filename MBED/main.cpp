@@ -181,11 +181,12 @@ static void send_message()
 
     // Loading data for tests if first time booting
     if (first_send_message) {
-            previously_transmitted = conso_data[0];//load_data_Init();
-            first_send_message = false;
-            predict_nok = true;
-            index_value = 0;
-            skipped = 0;
+        previously_transmitted = conso_data[0];//load_data_Init();
+        first_send_message = false;
+        predict_nok = true;
+        index_value = 0;
+        skipped = 0;
+    }
 
     // 1. Import data into buffer
     float x_min = -363.16381836;
@@ -221,9 +222,9 @@ static void send_message()
     index_value++;
 
     if (index_value == 720) { index_value = 0;}
-    
+
     printf("Actual data was : %i\n", (int)(conso_data[index_value]));
-   
+
     float difference_prediction = (y_val-conso_data[index_value])/(conso_data[index_value]);
 
     if (difference_prediction < 0) {
@@ -236,8 +237,8 @@ static void send_message()
     } else {
         predict_nok=true;
         y_val=conso_data[index_value];
-    } 
-    
+    }
+
     // 3. Log the prediction
 
     printf("Data to transmit : %i \n",(int)(y_val));
