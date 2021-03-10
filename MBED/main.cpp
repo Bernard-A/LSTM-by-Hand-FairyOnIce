@@ -177,7 +177,6 @@ static void send_message()
     static int skipped;
 
     float *lstm_output;
-    lstm_output = malloc(HUNIT * sizeof(float));
     float output_value;
 
     // Loading data for tests if first time booting
