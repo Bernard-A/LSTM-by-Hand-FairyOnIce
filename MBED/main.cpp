@@ -204,10 +204,10 @@ static void send_message()
     // Dual prediction
     // We position ourselves as the server and base prediction on previously transmitted value
 
-    lstm_output = lstmCellSimple(x_val, lstm_cell_input_weights, lstm_cell_hidden_weights,
-                                 lstm_cell_bias, lstm_cell_hidden_layer, lstm_cell_cell_states);
+    lstmCellSimple(x_val, lstm_cell_input_weights, lstm_cell_hidden_weights,
+		    lstm_cell_bias, lstm_cell_hidden_layer, lstm_cell_cell_states);
 
-    output_value = dense_nn(lstm_output, dense_weights, dense_bias);
+    output_value = dense_nn(lstm_cell_hidden_layer, dense_weights, dense_bias);
 
     float y_val = output_value;
 
@@ -353,8 +353,8 @@ static void lora_event_handler(lorawan_event_t event)
     }
 }
 
-float * lstmCellSimple(float input, const float * input_weights, const float * hidden_weights,
-                       const float * bias, float * hidden_layer, const float * cell_states) {
+void lstmCellSimple(float input, const float * input_weights, const float * hidden_weights,
+		const float * bias, float * hidden_layer, float * cell_states) {
     /**
      * input - float
      * input_weight - float array (4*HUNIT) - Weights W_i, W_f, W_c, W_o
@@ -404,10 +404,12 @@ float * lstmCellSimple(float input, const float * input_weights, const float * h
 
     }
 
-    hidden_layer = new_hidden_layer;
-    cell_states = new_cell_states;
+    for (int i = 0; i < HUNIT; ++i) {
+	    hidden_layer[i] = new_hidden_layer[i];
+	    cell_states[i] = new_cell_states[i];
+    }
 
-    return hidden_layer;
+    return;
 }
 
 

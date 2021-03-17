@@ -7,8 +7,8 @@
 #define PI 3.141592654
 #include "parameters.h"
 
-float * lstmCellSimple(float input, const float * input_weights, const float * hidden_weights,
-                       const float * bias, float * hidden_layer, const float * cell_states);
+void lstmCellSimple(float input, const float * input_weights, const float * hidden_weights,
+                       const float * bias, float * hidden_layer, float * cell_states);
 
 float dense_nn(const float * input, const float * Weight, float bias);
 
@@ -16,22 +16,24 @@ float sigmoid_function (float input);
 
 int main() {
 
-    float * lstm_output;
     float input_value = 0.410709;
+    // Yt-1 = 0.449882 => -0.2188218818202041 , Yt = 0.4286432 => -0.2020145486608096, xt = 0.428020
     float output_value;
 
-    lstm_output = lstmCellSimple(input_value, lstm_cell_input_weights, lstm_cell_hidden_weights,
-                                 lstm_cell_bias, lstm_cell_hidden_layer, lstm_cell_cell_states);
+    printf("%f\n", lstm_cell_hidden_layer[0]);
 
-    output_value = dense_nn(lstm_output, dense_weights, dense_bias);
+    lstmCellSimple(input_value, lstm_cell_input_weights, lstm_cell_hidden_weights,
+                                 lstm_cell_bias, lstm_cell_hidden_layer, lstm_cell_cell_states);
+    
+    output_value = dense_nn(lstm_cell_hidden_layer, dense_weights, dense_bias);
 
     printf("Output Value %f\n", output_value);
 
     return 0;
 }
 
-float * lstmCellSimple(float input, const float * input_weights, const float * hidden_weights,
-                       const float * bias, float * hidden_layer, const float * cell_states) {
+void lstmCellSimple(float input, const float * input_weights, const float * hidden_weights,
+                       const float * bias, float * hidden_layer, float * cell_states) {
     /**
      * input - float
      * input_weight - float array (4*HUNIT) - Weights W_i, W_f, W_c, W_o
@@ -81,10 +83,13 @@ float * lstmCellSimple(float input, const float * input_weights, const float * h
 
     }
 
-    hidden_layer = new_hidden_layer;
-    cell_states = new_cell_states;
+    for (int i = 0; i < HUNIT; ++i) {
 
-    return hidden_layer;
+        hidden_layer[i] = new_hidden_layer[i];
+        cell_states[i] = new_cell_states[i];
+    }
+
+    return;
 }
 
 float dense_nn(const float * input, const float * Weight, float bias) {
