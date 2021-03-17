@@ -169,10 +169,9 @@ static void send_message()
     printf("waited 7s");
 
     // 0. Buffer allocation
-    static uint8_t last_top_result = 99;
     static bool first_send_message = true;
     bool predict_nok;
-    static float previously_transmitted;
+    float previously_transmitted;
     static int index_value;
     static int skipped;
 
@@ -181,7 +180,8 @@ static void send_message()
 
     // Loading data for tests if first time booting
     if (first_send_message) {
-        previously_transmitted = conso_data[0];//load_data_Init();
+        previously_transmitted = conso_data[0]
+        x_diff = 0;//load_data_Init();
         first_send_message = false;
         predict_nok = true;
         index_value = 0;
@@ -194,7 +194,7 @@ static void send_message()
     float tx_min = 0.;
     float tx_max = 0.9;
     // Change this value to fit value for inferencing
-    float x_val = (previously_transmitted - x_min) / (x_max - x_min) * (tx_max - tx_min) + tx_min;
+    float x_val = (x_diff - x_min) / (x_max - x_min) * (tx_max - tx_min) + tx_min;
             // X_min= -363.16381836
             // X_max= +373.3527832
             // max=0.9
@@ -209,10 +209,12 @@ static void send_message()
 
     output_value = dense_nn(lstm_cell_hidden_layer, dense_weights, dense_bias);
 
-    float y_val = output_value;
+    float y_diff_scaled = output_value;
 
     // Determining result unscaled
-    y_val = (y_val - tx_min) / (tx_max - tx_min) * (x_max - x_min) + x_min + previously_transmitted;
+    float y_diff = (y_diff_scaled - tx_min) / (tx_max - tx_min) * (x_max - x_min) + x_min;
+
+    float y_val = y_diff + previously_transmitted;
 
     printf("Index Value %i\n", index_value);
 
@@ -242,9 +244,12 @@ static void send_message()
 
     printf("Data to transmit : %i \n",(int)(y_val));
 
-    // 4. Send data based on prediction
+    // 3.5 Prepare next
 
+    x_diff = y_val - previously_transmitted;
     previously_transmitted = y_val;
+
+    // 4. Send data based on prediction
 
     uint16_t packet_len;
     int16_t retcode;

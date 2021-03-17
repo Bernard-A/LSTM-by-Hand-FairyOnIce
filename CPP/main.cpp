@@ -16,7 +16,7 @@ float sigmoid_function (float input);
 
 int main() {
 
-    float input_value = 0.410709;
+    float input_value = 0.428020;
     // Yt-1 = 0.449882 => -0.2188218818202041 , Yt = 0.4286432 => -0.2020145486608096, xt = 0.428020
     float output_value;
 
@@ -24,7 +24,9 @@ int main() {
 
     lstmCellSimple(input_value, lstm_cell_input_weights, lstm_cell_hidden_weights,
                                  lstm_cell_bias, lstm_cell_hidden_layer, lstm_cell_cell_states);
-    
+
+    printf("%f\n", lstm_cell_hidden_layer[0]);
+
     output_value = dense_nn(lstm_cell_hidden_layer, dense_weights, dense_bias);
 
     printf("Output Value %f\n", output_value);
