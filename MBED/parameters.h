@@ -2,6 +2,22 @@
 // Created by spiderweak on 3/10/21.
 //
 
+/**
+ * How to use this file :
+ *
+ * Set HUNIT to the numbers of hidden layers for your LSTM
+ *
+ * Then set the weights as extracted from Python's get_weights function on your LSTM
+ *
+ * If you wish to redevelop on your side, note the importance of this order in the weights
+ * 	InputCell, ForgetCell, CellCandidate, OutputCell
+ *
+ * The get_weights function returns a given amount of array
+ * 	First array is input_weights of size 4*HUNIT
+ * 	Second array is hidden_weights, a matrix of size HUNIT x 4*HUNIT
+ * 	Third array is bias of size 4*HUNIT
+ */
+
 #ifndef CPP_PARAMETERS_H
 #define CPP_PARAMETERS_H
 
@@ -15,6 +31,7 @@ const float lstm_cell_input_weights[4 * HUNIT] = {0.3234084, 0.70131856, 0.37922
                                                   0.66995215, -0.54794693, 0.1504041,
                                                   -0.10613328, -0.1059448, -0.6422383,
                                                   -0.00922386, 0.08984761, 0.14972672};
+
 const float lstm_cell_hidden_weights[4 * HUNIT * HUNIT] = {0.4997586, -0.42921698, 0.24008259,
                                                            0.03498572, -0.13131998, 0.15442386,
                                                            -0.33034173, -0.0227247, -0.35828012,
@@ -27,6 +44,7 @@ const float lstm_cell_hidden_weights[4 * HUNIT * HUNIT] = {0.4997586, -0.4292169
                                                            0.22523263, -0.27819708, -0.60721684,
                                                            -0.11857513, -0.12831974, -0.09951104,
                                                            -0.43784, 0.33351612, 0.37064832};
+
 const float lstm_cell_bias[4 * HUNIT] = {0.10343148, 0.11245319, 0.21322289,
                                          1., 1., 1.,
                                          0.18435329, 0.18004698, -0.2149152,

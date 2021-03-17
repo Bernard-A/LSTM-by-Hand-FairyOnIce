@@ -1,4 +1,4 @@
-float * lstmCellSimple(float input, const float * input_weights, const float * hidden_weights,
+void lstmCellSimple(float input, const float * input_weights, const float * hidden_weights,
                        const float * bias, float * hidden_layer, const float * cell_states);
 
 float dense_nn(const float * input, const float * Weight, float bias);
