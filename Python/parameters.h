@@ -11,14 +11,14 @@
 
 const int hunit = HUNIT;
 
-const float lstm_cell_input_weights[4 * HUNIT] = {-0.5231911540031433, 0.8216911554336548, 0.2396586686372757, -0.54414963722229};
+const float lstm_cell_input_weights[4 * HUNIT] = {-0.47074094414711, 0.5782343149185181, 0.7150036096572876, 0.8580639362335205};
 
-const float lstm_cell_hidden_weights[4 * HUNIT * HUNIT] = {-0.12456011772155762, -0.08975572139024734, 0.7595713138580322, 0.6320444345474243};
+const float lstm_cell_hidden_weights[4 * HUNIT * HUNIT] = {0.31322693824768066, -0.032405853271484375, -0.9226136207580566, 0.2227618396282196};
 
-const float lstm_cell_bias[4 * HUNIT] = {-0.03327455371618271, 1.0, -0.2779948115348816, -0.03327660635113716};
+const float lstm_cell_bias[4 * HUNIT] = {0.3858514428138733, 1.0, 0.3026246428489685, 0.3853971064090729};
 
-float lstm_cell_hidden_layer[HUNIT] = {-0.25512707233428955};
-float lstm_cell_cell_states[HUNIT] = {-0.7792224287986755};
+float lstm_cell_hidden_layer[HUNIT] = {0.3922583758831024};
+float lstm_cell_cell_states[HUNIT] = {0.6355526447296143};
 
-const float dense_weights[HUNIT] = {-1.1823006868362427};
-const float dense_bias = 0.2913602292537689;
+const float dense_weights[HUNIT] = {0.7915790677070618};
+const float dense_bias = 0.25034016370773315;
