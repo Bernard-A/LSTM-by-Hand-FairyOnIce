@@ -33,7 +33,7 @@ limitations under the License.
 
 // Data for prediction
 #include "conso_data.h"
-
+#include "diff_scaled.h"
 // LSTM Parameters
 #include "parameters.h"
 
@@ -200,7 +200,7 @@ static void send_message()
         predict_nok = true;
         index_value = 0;
         skipped = 0;
-        printf("Error\n");
+        printf("\nError\n");
     }
 
     // 1. Scaler
@@ -208,7 +208,7 @@ static void send_message()
     float x_max = 373.3527832;
     float tx_min = 0.;
     float tx_max = 0.9;
-    float x_diff_scaled = (x_diff - x_min) / (x_max - x_min) * (tx_max - tx_min) + tx_min;
+    x_diff_scaled = diff_scaled_value[index_value];//(x_diff - x_min) / (x_max - x_min) * (tx_max - tx_min) + tx_min;
             // Formula : X_scaled = (X-X_min)/(X_max-X_min) * (max-min) + min
 
     // 2. Neural Network Prediction
@@ -225,7 +225,7 @@ static void send_message()
     // Dense Neural network execution
     output_value = dense_nn(lstm_cell_hidden_layer, dense_weights, dense_bias);
 
-    printf("output = %i\n", (int) (output_value*1000)); // Debugging info, reading output value
+    printf("output = %i\n\n", (int) (output_value*1000)); // Debugging info, reading output value
 
     // 3. Unscaling and coming back to real data
     float y_diff_scaled = output_value; // Output value is y_diff_scaled
