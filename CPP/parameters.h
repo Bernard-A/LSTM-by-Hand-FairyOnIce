@@ -22,4 +22,3 @@ float lstm_cell_cell_states[HUNIT] = {-1.2524135112762451};
 
 const float dense_weights[HUNIT] = {-0.6404330730438232};
 const float dense_bias = 0.3013148605823517;
-

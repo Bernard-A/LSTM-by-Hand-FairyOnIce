@@ -16,7 +16,19 @@ float sigmoid_function (float input);
 
 int main() {
 
-    float input_value = 0.428020;
+    /*
+     *
+     * X_train=0.489216, y_train=0.419188
+     * X_train=0.419188, y_train=0.433686
+     * X_train=0.433686, y_train=0.419556
+     * X_train=0.419556, y_train=0.454473
+     * X_train=0.454473, y_train=0.524359
+     * X_train=0.524359, y_train=0.354362
+     * X_train=0.354362, y_train=0.452008
+     * X_train=0.452008, y_train=0.424531
+     *
+     */
+    float input_value = 0.419188;
     // Yt-1 = 0.449882 => -0.2188218818202041 , Yt = 0.4286432 => -0.2020145486608096, xt = 0.428020
     float output_value;
 
