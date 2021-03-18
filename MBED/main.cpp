@@ -101,6 +101,8 @@ static lorawan_app_callbacks_t callbacks;
 
 int inference_count = 0;
 
+static float first_send_message = true;
+
 /**
  * Entry point for application
  */
@@ -169,23 +171,24 @@ static void send_message()
     printf("waited 7s");
 
     // 0. Buffer allocation
-    static bool first_send_message = true;
     bool predict_nok;
     float previously_transmitted;
     static int index_value;
     static int skipped;
 
-    float *lstm_output;
+    static float x_diff;
+
     float output_value;
 
     // Loading data for tests if first time booting
     if (first_send_message) {
-        previously_transmitted = conso_data[0]
-        x_diff = 0;//load_data_Init();
         first_send_message = false;
+        previously_transmitted = conso_data[0];
+        x_diff = 0;//load_data_Init();
         predict_nok = true;
         index_value = 0;
         skipped = 0;
+        printf("Error\n");
     }
 
     // 1. Import data into buffer
@@ -204,11 +207,14 @@ static void send_message()
     // Dual prediction
     // We position ourselves as the server and base prediction on previously transmitted value
 
+    printf("X_value = %i\n", (int) (x_val*1000));
+    
     lstmCellSimple(x_val, lstm_cell_input_weights, lstm_cell_hidden_weights,
 		    lstm_cell_bias, lstm_cell_hidden_layer, lstm_cell_cell_states);
 
     output_value = dense_nn(lstm_cell_hidden_layer, dense_weights, dense_bias);
 
+    printf("output = %i\n", (int) (output_value*1000));
     float y_diff_scaled = output_value;
 
     // Determining result unscaled
@@ -222,7 +228,7 @@ static void send_message()
 
     index_value++;
 
-    if (index_value == 720) { index_value = 0;}
+    if (index_value == 718) { index_value = 0;}
 
     printf("Actual data was : %i\n", (int)(conso_data[index_value]));
 
@@ -240,13 +246,17 @@ static void send_message()
         y_val=conso_data[index_value];
     }
 
+
+    x_diff = conso_data[index_value] - conso_data[index_value -1];
+
     // 3. Log the prediction
 
     printf("Data to transmit : %i \n",(int)(y_val));
 
     // 3.5 Prepare next
 
-    x_diff = y_val - previously_transmitted;
+    y_val=conso_data[index_value];
+
     previously_transmitted = y_val;
 
     // 4. Send data based on prediction
