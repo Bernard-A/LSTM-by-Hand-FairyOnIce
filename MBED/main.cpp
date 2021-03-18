@@ -255,7 +255,7 @@ static void send_message()
         y_val=conso_data[index_value]; // If prediction is not ok, we transmit real value
     }
 
-    // 6. Loging the reference value
+    // 6. Logging the reference value
     printf("Data to transmit : %i \n",(int)(y_val));
 
     // 7. Clean up after decision making
