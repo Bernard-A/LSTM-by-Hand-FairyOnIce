@@ -166,19 +166,31 @@ int main(void) {
  */
 static void send_message()
 {
+    // 0. Waiting between transmissions
+
     printf("waiting 7 secs");
     ThisThread::sleep_for(chrono::seconds(7));
     printf("waited 7s");
 
-    // 0. Buffer allocation
-    bool predict_nok;
-    float previously_transmitted;
+    // 0.5 Buffer allocation
+    // Boolean value corresponding to prediction status
+    static bool predict_nok;
+
+    // Previously transmitted value
+    static float previously_transmitted;
+
+    // Index for reading conso_data file
     static int index_value;
+
+    // Counts the number of value skipped
     static int skipped;
 
+    // Declaration of the differentiated variable and the scaled differentiated variable
     static float x_diff;
+    static float x_diff_scaled;
 
-    float output_value;
+    // Declaration of the variable that stores the output of the LSTM
+    static float output_value;
 
     // Loading data for tests if first time booting
     if (first_send_message) {
@@ -191,75 +203,71 @@ static void send_message()
         printf("Error\n");
     }
 
-    // 1. Import data into buffer
+    // 1. Scaler
     float x_min = -363.16381836;
     float x_max = 373.3527832;
     float tx_min = 0.;
     float tx_max = 0.9;
-    // Change this value to fit value for inferencing
-    float x_val = (x_diff - x_min) / (x_max - x_min) * (tx_max - tx_min) + tx_min;
-            // X_min= -363.16381836
-            // X_max= +373.3527832
-            // max=0.9
-            // min=0
+    float x_diff_scaled = (x_diff - x_min) / (x_max - x_min) * (tx_max - tx_min) + tx_min;
             // Formula : X_scaled = (X-X_min)/(X_max-X_min) * (max-min) + min
 
+    // 2. Neural Network Prediction
     // Dual prediction
     // We position ourselves as the server and base prediction on previously transmitted value
 
-    printf("X_value = %i\n", (int) (x_val*1000));
-    
-    lstmCellSimple(x_val, lstm_cell_input_weights, lstm_cell_hidden_weights,
+    printf("X_value = %i\n", (int) (x_diff_scaled*1000)); // Debugging info, reading x_diff_scaled
+
+    // LSTM Input is diffed and scaled data
+    // Other input are cell weights and states
+    lstmCellSimple(x_diff_scaled, lstm_cell_input_weights, lstm_cell_hidden_weights,
 		    lstm_cell_bias, lstm_cell_hidden_layer, lstm_cell_cell_states);
 
+    // Dense Neural network execution
     output_value = dense_nn(lstm_cell_hidden_layer, dense_weights, dense_bias);
 
-    printf("output = %i\n", (int) (output_value*1000));
-    float y_diff_scaled = output_value;
+    printf("output = %i\n", (int) (output_value*1000)); // Debugging info, reading output value
 
-    // Determining result unscaled
+    // 3. Unscaling and coming back to real data
+    float y_diff_scaled = output_value; // Output value is y_diff_scaled
+
     float y_diff = (y_diff_scaled - tx_min) / (tx_max - tx_min) * (x_max - x_min) + x_min;
 
     float y_val = y_diff + previously_transmitted;
 
+    // 4. Logging values
     printf("Index Value %i\n", index_value);
-
     printf("Value calculated is %i\n",(int) (y_val));
-
     index_value++;
-
     if (index_value == 718) { index_value = 0;}
-
     printf("Actual data was : %i\n", (int)(conso_data[index_value]));
 
-    float difference_prediction = (y_val-conso_data[index_value])/(conso_data[index_value]);
-
+    // 5. Transmission decision
+    float difference_prediction = (y_val-conso_data[index_value])/(conso_data[index_value]); // Calculating accuracy
     if (difference_prediction < 0) {
             difference_prediction = - difference_prediction;
     }
-
+    // Comparison with threshold
     if (difference_prediction < THRESHOLD) {
         predict_nok=false;
-        skipped++;
+        skipped++; // Increase amount of skipped value
     } else {
         predict_nok=true;
-        y_val=conso_data[index_value];
+        y_val=conso_data[index_value]; // If prediction is not ok, we transmit real value
     }
 
-
-    x_diff = conso_data[index_value] - conso_data[index_value -1];
-
-    // 3. Log the prediction
-
+    // 6. Loging the reference value
     printf("Data to transmit : %i \n",(int)(y_val));
 
-    // 3.5 Prepare next
+    // 7. Clean up after decision making
+    x_diff = conso_data[index_value] - conso_data[index_value -1];
+        // Declaring x_diff for the next round
+        // Here we declare based of conso_data value
 
-    y_val=conso_data[index_value];
+    previously_transmitted = conso_data[index_value];
+        // Previously tranmitted should set to y_value instead of conso_data.
+        // Temporary forcing it for debugging
 
-    previously_transmitted = y_val;
-
-    // 4. Send data based on prediction
+    // 8. Transmission
 
     uint16_t packet_len;
     int16_t retcode;
