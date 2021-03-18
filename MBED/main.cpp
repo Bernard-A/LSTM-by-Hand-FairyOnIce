@@ -264,7 +264,7 @@ static void send_message()
         // Here we declare based of conso_data value
 
     previously_transmitted = conso_data[index_value];
-        // Previously tranmitted should set to y_value instead of conso_data.
+        // Previously transmitted should set to y_value instead of conso_data.
         // Temporary forcing it for debugging
 
     // 8. Transmission
