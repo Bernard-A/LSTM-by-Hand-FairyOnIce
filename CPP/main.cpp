@@ -8,7 +8,7 @@
 #include "parameters.h"
 
 void lstmCellSimple(float input, const float * input_weights, const float * hidden_weights,
-                    const float * bias, float * hidden_layer, float * cell_states);
+                       const float * bias, float * hidden_layer, float * cell_states);
 
 float dense_nn(const float * input, const float * Weight, float bias);
 
@@ -16,16 +16,26 @@ float sigmoid_function (float input);
 
 int main() {
 
-    float input_value = 0.502;
-
+    /*
+     *
+     * X_train=0.489216, y_train=0.419188
+     * X_train=0.419188, y_train=0.433686
+     * X_train=0.433686, y_train=0.419556
+     * X_train=0.419556, y_train=0.454473
+     * X_train=0.454473, y_train=0.524359
+     * X_train=0.524359, y_train=0.354362
+     * X_train=0.354362, y_train=0.452008
+     * X_train=0.452008, y_train=0.424531
+     *
+     */
+    float input_value = 0.419188;
     // Yt-1 = 0.449882 => -0.2188218818202041 , Yt = 0.4286432 => -0.2020145486608096, xt = 0.428020
     float output_value;
 
-    //lstm_cell_hidden_layer[0] = -0.072064;
     printf("%f\n", lstm_cell_hidden_layer[0]);
 
     lstmCellSimple(input_value, lstm_cell_input_weights, lstm_cell_hidden_weights,
-                   lstm_cell_bias, lstm_cell_hidden_layer, lstm_cell_cell_states);
+                                 lstm_cell_bias, lstm_cell_hidden_layer, lstm_cell_cell_states);
 
     printf("%f\n", lstm_cell_hidden_layer[0]);
 
@@ -37,7 +47,7 @@ int main() {
 }
 
 void lstmCellSimple(float input, const float * input_weights, const float * hidden_weights,
-                    const float * bias, float * hidden_layer, float * cell_states) {
+                       const float * bias, float * hidden_layer, float * cell_states) {
     /**
      * input - float
      * input_weight - float array (4*HUNIT) - Weights W_i, W_f, W_c, W_o
@@ -76,7 +86,7 @@ void lstmCellSimple(float input, const float * input_weights, const float * hidd
 
         input_gate[i] = sigmoid_function(input_gate[i]);
         forget_gate[i] = sigmoid_function(forget_gate[i]);
-        cell_candidate[i] = (float) (tanh((double) cell_candidate[i]));
+        cell_candidate[i] = sigmoid_function(cell_candidate[i]);
         output_gate[i] = sigmoid_function(output_gate[i]);
     }
 
@@ -103,7 +113,6 @@ float dense_nn(const float * input, const float * Weight, float bias) {
     }
     output += bias;
     return output;
-
 }
 
 

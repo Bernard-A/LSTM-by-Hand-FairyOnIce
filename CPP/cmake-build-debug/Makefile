@@ -143,32 +143,32 @@ CPP/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP.dir/build.make CMakeFiles/CPP.dir/build
 .PHONY : CPP/fast
 
-main_alt.o: main_alt.cpp.o
+main.o: main.cpp.o
 
-.PHONY : main_alt.o
+.PHONY : main.o
 
 # target to build an object file
-main_alt.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP.dir/build.make CMakeFiles/CPP.dir/main_alt.cpp.o
-.PHONY : main_alt.cpp.o
+main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP.dir/build.make CMakeFiles/CPP.dir/main.cpp.o
+.PHONY : main.cpp.o
 
-main_alt.i: main_alt.cpp.i
+main.i: main.cpp.i
 
-.PHONY : main_alt.i
+.PHONY : main.i
 
 # target to preprocess a source file
-main_alt.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP.dir/build.make CMakeFiles/CPP.dir/main_alt.cpp.i
-.PHONY : main_alt.cpp.i
+main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP.dir/build.make CMakeFiles/CPP.dir/main.cpp.i
+.PHONY : main.cpp.i
 
-main_alt.s: main_alt.cpp.s
+main.s: main.cpp.s
 
-.PHONY : main_alt.s
+.PHONY : main.s
 
 # target to generate assembly for a file
-main_alt.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP.dir/build.make CMakeFiles/CPP.dir/main_alt.cpp.s
-.PHONY : main_alt.cpp.s
+main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP.dir/build.make CMakeFiles/CPP.dir/main.cpp.s
+.PHONY : main.cpp.s
 
 # Help Target
 help:
@@ -179,9 +179,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... CPP"
-	@echo "... main_alt.o"
-	@echo "... main_alt.i"
-	@echo "... main_alt.s"
+	@echo "... main.o"
+	@echo "... main.i"
+	@echo "... main.s"
 .PHONY : help
 
 

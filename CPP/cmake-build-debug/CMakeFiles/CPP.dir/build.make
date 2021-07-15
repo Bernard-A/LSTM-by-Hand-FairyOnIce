@@ -77,27 +77,27 @@ include CMakeFiles/CPP.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/CPP.dir/flags.make
 
-CMakeFiles/CPP.dir/main_alt.cpp.o: CMakeFiles/CPP.dir/flags.make
-CMakeFiles/CPP.dir/main_alt.cpp.o: ../main_alt.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/spiderweak/CLionProjects/LSTM-by-Hand-FairyOnIce/CPP/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/CPP.dir/main_alt.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/CPP.dir/main_alt.cpp.o -c /home/spiderweak/CLionProjects/LSTM-by-Hand-FairyOnIce/CPP/main_alt.cpp
+CMakeFiles/CPP.dir/main.cpp.o: CMakeFiles/CPP.dir/flags.make
+CMakeFiles/CPP.dir/main.cpp.o: ../main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/spiderweak/CLionProjects/LSTM-by-Hand-FairyOnIce/CPP/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/CPP.dir/main.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/CPP.dir/main.cpp.o -c /home/spiderweak/CLionProjects/LSTM-by-Hand-FairyOnIce/CPP/main.cpp
 
-CMakeFiles/CPP.dir/main_alt.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/CPP.dir/main_alt.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/spiderweak/CLionProjects/LSTM-by-Hand-FairyOnIce/CPP/main_alt.cpp > CMakeFiles/CPP.dir/main_alt.cpp.i
+CMakeFiles/CPP.dir/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/CPP.dir/main.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/spiderweak/CLionProjects/LSTM-by-Hand-FairyOnIce/CPP/main.cpp > CMakeFiles/CPP.dir/main.cpp.i
 
-CMakeFiles/CPP.dir/main_alt.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/CPP.dir/main_alt.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/spiderweak/CLionProjects/LSTM-by-Hand-FairyOnIce/CPP/main_alt.cpp -o CMakeFiles/CPP.dir/main_alt.cpp.s
+CMakeFiles/CPP.dir/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/CPP.dir/main.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/spiderweak/CLionProjects/LSTM-by-Hand-FairyOnIce/CPP/main.cpp -o CMakeFiles/CPP.dir/main.cpp.s
 
 # Object files for target CPP
 CPP_OBJECTS = \
-"CMakeFiles/CPP.dir/main_alt.cpp.o"
+"CMakeFiles/CPP.dir/main.cpp.o"
 
 # External object files for target CPP
 CPP_EXTERNAL_OBJECTS =
 
-CPP: CMakeFiles/CPP.dir/main_alt.cpp.o
+CPP: CMakeFiles/CPP.dir/main.cpp.o
 CPP: CMakeFiles/CPP.dir/build.make
 CPP: CMakeFiles/CPP.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/spiderweak/CLionProjects/LSTM-by-Hand-FairyOnIce/CPP/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable CPP"
