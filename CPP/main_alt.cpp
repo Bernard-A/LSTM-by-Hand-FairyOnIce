@@ -8,7 +8,7 @@
 #include "parameters.h"
 
 void lstmCellSimple(float input, const float * input_weights, const float * hidden_weights,
-                    const float * bias, float * hidden_layer, float * cell_states);
+                       const float * bias, float * hidden_layer, float * cell_states);
 
 float dense_nn(const float * input, const float * Weight, float bias);
 
@@ -16,6 +16,19 @@ float sigmoid_function (float input);
 
 int main() {
 
+    /*
+     *
+     * X_test=0.435522, y_test=0.497889
+     * X_test=0.497889, y_test=0.410709
+     * X_test=0.410709, y_test=0.465723
+     * X_test=0.465723, y_test=0.410070
+     * X_test=0.410070, y_test=0.456710
+     * X_test=0.456710, y_test=0.419286
+     * X_test=0.419286, y_test=0.465536
+     * X_test=0.465536, y_test=0.435800
+     * X_test=0.435800, y_test=0.476196
+     *
+     */
     float input_value = 0.502;
 
     // Yt-1 = 0.449882 => -0.2188218818202041 , Yt = 0.4286432 => -0.2020145486608096, xt = 0.428020
@@ -25,7 +38,7 @@ int main() {
     printf("%f\n", lstm_cell_hidden_layer[0]);
 
     lstmCellSimple(input_value, lstm_cell_input_weights, lstm_cell_hidden_weights,
-                   lstm_cell_bias, lstm_cell_hidden_layer, lstm_cell_cell_states);
+                                 lstm_cell_bias, lstm_cell_hidden_layer, lstm_cell_cell_states);
 
     printf("%f\n", lstm_cell_hidden_layer[0]);
 
@@ -37,7 +50,7 @@ int main() {
 }
 
 void lstmCellSimple(float input, const float * input_weights, const float * hidden_weights,
-                    const float * bias, float * hidden_layer, float * cell_states) {
+                       const float * bias, float * hidden_layer, float * cell_states) {
     /**
      * input - float
      * input_weight - float array (4*HUNIT) - Weights W_i, W_f, W_c, W_o

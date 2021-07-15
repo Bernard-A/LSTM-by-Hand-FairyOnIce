@@ -268,7 +268,6 @@ static void send_message()
         // Temporary forcing it for debugging
 
     // 8. Transmission
-
     uint16_t packet_len;
     int16_t retcode;
 
@@ -422,19 +421,18 @@ void lstmCellSimple(float input, const float * input_weights, const float * hidd
 
     for (int i = 0; i < HUNIT; ++i) {
 
-        new_cell_states[i] = forget_gate[i] * cell_states [i] + input_gate[i] * cell_candidate[i];
+        new_cell_states[i] = forget_gate[i] * cell_states[i] + input_gate[i] * cell_candidate[i];
         new_hidden_layer[i] = output_gate[i] * tanh(new_cell_states[i]);
 
     }
 
     for (int i = 0; i < HUNIT; ++i) {
-	    hidden_layer[i] = new_hidden_layer[i];
-	    cell_states[i] = new_cell_states[i];
+        hidden_layer[i] = new_hidden_layer[i];
+        cell_states[i] = new_cell_states[i];
     }
 
     return;
 }
-
 
 float dense_nn(const float * input, const float * Weight, float bias) {
     float output = 0;

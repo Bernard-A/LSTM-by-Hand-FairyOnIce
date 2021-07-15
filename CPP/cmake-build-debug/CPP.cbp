@@ -82,7 +82,7 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/spiderweak/CLionProjects/LSTM-by-Hand-FairyOnIce/CPP/main.cpp">
+		<Unit filename="/home/spiderweak/CLionProjects/LSTM-by-Hand-FairyOnIce/CPP/main_alt.cpp">
 			<Option target="CPP"/>
 		</Unit>
 		<Unit filename="/home/spiderweak/CLionProjects/LSTM-by-Hand-FairyOnIce/CPP/CMakeLists.txt">

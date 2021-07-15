@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/spiderweak/CLionProjects/LSTM-by-Hand-FairyOnIce/CPP/main.cpp" "/home/spiderweak/CLionProjects/LSTM-by-Hand-FairyOnIce/CPP/cmake-build-debug/CMakeFiles/CPP.dir/main.cpp.o"
+  "/home/spiderweak/CLionProjects/LSTM-by-Hand-FairyOnIce/CPP/main_alt.cpp" "/home/spiderweak/CLionProjects/LSTM-by-Hand-FairyOnIce/CPP/cmake-build-debug/CMakeFiles/CPP.dir/main_alt.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
